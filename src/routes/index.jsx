@@ -6,6 +6,9 @@ import PublicRoute from './PublicRoute';
 import DashboardPage from '../pages/DashboardPage';
 import LoginPage from '../pages/LoginPage';
 import NotFoundPage from '../pages/NotFoundPage';
+import IssuesPage from '../pages/IssuesPage';
+import IssueDetailsPage from '../pages/IssueDetailsPage';
+import CreateEditIssuePage from '../pages/CreateEditIssuePage';
 
 export const router = createBrowserRouter([
   {
@@ -34,6 +37,22 @@ export const router = createBrowserRouter([
               {
                 path: 'dashboard',
                 element: <Navigate to="/" replace />,
+              },
+              {
+                path: 'issues',
+                element: <IssuesPage />,
+              },
+              {
+                path: 'issues/new',
+                element: <CreateEditIssuePage />,
+              },
+              {
+                path: 'issues/:id',
+                element: <IssueDetailsPage />,
+              },
+              {
+                path: 'issues/:id/edit',
+                element: <CreateEditIssuePage />,
               },
             ],
           },

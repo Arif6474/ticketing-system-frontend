@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 export function Sidebar() {
   const navItems = [
     { name: 'Dashboard', path: '/' },
-    { name: 'Issues', path: '/issues', isPlaceholder: true },
+    { name: 'Issues', path: '/issues' },
     { name: 'Projects', path: '/projects', isPlaceholder: true },
     { name: 'Modules', path: '/modules', isPlaceholder: true },
     { name: 'Users', path: '/users', isPlaceholder: true },
@@ -35,6 +35,7 @@ export function Sidebar() {
           <NavLink
             key={item.name}
             to={item.path}
+            end={item.path === '/'}
             className={({ isActive }) =>
               `flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
                 isActive
