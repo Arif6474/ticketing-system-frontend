@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getIssue, deleteIssue, updateIssueStage } from '../api/issues';
+import { updateVerificationStatus } from '../api/verification';
 import useAuth from '../hooks/useAuth';
 import Button from '../components/ui/Button';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
@@ -22,9 +23,13 @@ export function IssueDetailsPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
-  
+
   const [actionError, setActionError] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
   const [updatingStage, setUpdatingStage] = useState(false);
+  const [updatingVerification, setUpdatingVerification] = useState(false);
+
+  const canVerify = user?.role === 'APP_ADMIN' || user?.role === 'CLIENT_ADMIN';
 
   const {
     data: issue,
@@ -43,6 +48,7 @@ export function IssueDetailsPage() {
       return;
     }
     setActionError('');
+    setSuccessMsg('');
     try {
       await deleteIssue(id);
       navigate('/issues');
@@ -55,13 +61,35 @@ export function IssueDetailsPage() {
     if (!newStage || newStage === issue.stage) return;
     setUpdatingStage(true);
     setActionError('');
+    setSuccessMsg('');
     try {
       await updateIssueStage(id, newStage);
+      setSuccessMsg(`Issue stage updated to ${newStage.replace(/_/g, ' ')}.`);
       refetch();
     } catch (err) {
       setActionError(err.message || 'Failed to update issue stage.');
     } finally {
       setUpdatingStage(false);
+    }
+  };
+
+  const handleVerificationDecision = async (status) => {
+    if (status === 'REJECTED') {
+      if (!window.confirm('Are you sure you want to REJECT verification for this issue?')) {
+        return;
+      }
+    }
+    setUpdatingVerification(true);
+    setActionError('');
+    setSuccessMsg('');
+    try {
+      await updateVerificationStatus(id, status);
+      setSuccessMsg(`Verification status updated to ${status}.`);
+      refetch();
+    } catch (err) {
+      setActionError(err.message || 'Failed to update verification status.');
+    } finally {
+      setUpdatingVerification(false);
     }
   };
 
@@ -124,6 +152,12 @@ export function IssueDetailsPage() {
       {actionError && (
         <div className="p-3.5 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs font-mono">
           {actionError}
+        </div>
+      )}
+
+      {successMsg && (
+        <div className="p-3.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs font-mono">
+          {successMsg}
         </div>
       )}
 
@@ -207,17 +241,40 @@ export function IssueDetailsPage() {
                 <span className="block text-[10px] font-mono uppercase text-slate-500 mb-1">
                   Verification Status
                 </span>
-                <span
-                  className={`px-2 py-1 rounded font-mono ${
-                    issue.verificationStatus === 'VERIFIED'
-                      ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                      : issue.verificationStatus === 'REJECTED'
-                      ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
-                      : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                  }`}
-                >
-                  {issue.verificationStatus}
-                </span>
+                <div className="flex flex-col gap-2">
+                  <div>
+                    <span
+                      className={`px-2 py-1 rounded font-mono ${
+                        issue.verificationStatus === 'VERIFIED'
+                          ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                          : issue.verificationStatus === 'REJECTED'
+                          ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+                          : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                      }`}
+                    >
+                      {issue.verificationStatus}
+                    </span>
+                  </div>
+
+                  {canVerify && issue.verificationStatus === 'PENDING_VERIFICATION' && (
+                    <div className="flex gap-2 pt-1">
+                      <button
+                        disabled={updatingVerification}
+                        onClick={() => handleVerificationDecision('VERIFIED')}
+                        className="flex-1 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition-colors cursor-pointer disabled:opacity-50"
+                      >
+                        Verify Issue
+                      </button>
+                      <button
+                        disabled={updatingVerification}
+                        onClick={() => handleVerificationDecision('REJECTED')}
+                        className="flex-1 py-1 rounded bg-rose-600 hover:bg-rose-500 text-white font-semibold text-xs transition-colors cursor-pointer disabled:opacity-50"
+                      >
+                        Reject Issue
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div className="pt-2 border-t border-slate-800 space-y-3">

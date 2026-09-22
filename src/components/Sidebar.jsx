@@ -1,14 +1,18 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import useAuth from '../hooks/useAuth';
 
 export function Sidebar() {
+  const { user } = useAuth();
+  const canVerify = user?.role === 'APP_ADMIN' || user?.role === 'CLIENT_ADMIN';
+
   const navItems = [
     { name: 'Dashboard', path: '/' },
     { name: 'Issues', path: '/issues' },
     { name: 'Projects', path: '/projects' },
     { name: 'Modules', path: '/modules' },
     { name: 'Users', path: '/users' },
-    { name: 'Verification', path: '/verification', isPlaceholder: true },
+    ...(canVerify ? [{ name: 'Verification', path: '/verification' }] : []),
   ];
 
   return (
@@ -45,11 +49,6 @@ export function Sidebar() {
             }
           >
             <span>{item.name}</span>
-            {item.isPlaceholder && (
-              <span className="px-1.5 py-0.5 text-[10px] rounded font-mono bg-slate-800/80 text-slate-500 border border-slate-700/60">
-                Soon
-              </span>
-            )}
           </NavLink>
         ))}
       </nav>

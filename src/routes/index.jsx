@@ -17,6 +17,7 @@ import CreateEditModulePage from '../pages/CreateEditModulePage';
 import UsersPage from '../pages/UsersPage';
 import UserDetailsPage from '../pages/UserDetailsPage';
 import CreateEditUserPage from '../pages/CreateEditUserPage';
+import VerificationPage from '../pages/VerificationPage';
 
 export const router = createBrowserRouter([
   {
@@ -105,6 +106,10 @@ export const router = createBrowserRouter([
               {
                 path: 'users/:id/edit',
                 element: <CreateEditUserPage />,
+              },
+              {
+                path: 'verification',
+                element: <VerificationPage />,
               },
             ],
           },
