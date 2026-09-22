@@ -2,7 +2,7 @@ const TOKEN_KEY = 'auth_token';
 const USER_KEY = 'auth_user';
 
 /**
- * Retrieve the current authentication token from storage.
+ * Retrieve current JWT access token from storage.
  * @returns {string|null}
  */
 export function getToken() {
@@ -10,7 +10,7 @@ export function getToken() {
 }
 
 /**
- * Store the authentication token.
+ * Store JWT access token.
  * @param {string} token
  */
 export function setToken(token) {
@@ -20,14 +20,14 @@ export function setToken(token) {
 }
 
 /**
- * Remove the authentication token.
+ * Remove JWT access token.
  */
 export function removeToken() {
   localStorage.removeItem(TOKEN_KEY);
 }
 
 /**
- * Retrieve stored user details.
+ * Retrieve cached user details.
  * @returns {object|null}
  */
 export function getUser() {
@@ -58,7 +58,7 @@ export function removeUser() {
 }
 
 /**
- * Check if a token exists in storage.
+ * Check if user is authenticated (token exists).
  * @returns {boolean}
  */
 export function isAuthenticated() {
@@ -66,7 +66,7 @@ export function isAuthenticated() {
 }
 
 /**
- * Clear all authentication data from storage.
+ * Clear all authentication storage keys.
  */
 export function clearAuth() {
   removeToken();

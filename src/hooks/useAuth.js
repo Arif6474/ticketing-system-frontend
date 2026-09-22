@@ -1,38 +1,15 @@
-import { useState, useEffect } from 'react';
-import { getToken, getUser, setToken, setUser, clearAuth, isAuthenticated } from '../utils/auth';
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 
 /**
- * Custom hook providing access to auth state and methods.
+ * Custom hook providing access to real authentication state and actions.
  */
 export function useAuth() {
-  const [user, setCurrentUser] = useState(getUser());
-  const [authenticated, setAuthenticated] = useState(isAuthenticated());
-
-  useEffect(() => {
-    const token = getToken();
-    setAuthenticated(Boolean(token));
-    setCurrentUser(getUser());
-  }, []);
-
-  const login = (token, userData) => {
-    setToken(token);
-    setUser(userData);
-    setCurrentUser(userData);
-    setAuthenticated(true);
-  };
-
-  const logout = () => {
-    clearAuth();
-    setCurrentUser(null);
-    setAuthenticated(false);
-  };
-
-  return {
-    user,
-    authenticated,
-    login,
-    logout,
-  };
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 }
 
 export default useAuth;

@@ -1,13 +1,19 @@
 import React from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { isAuthenticated } from '../utils/auth';
+import useAuth from '../hooks/useAuth';
+import { LoadingScreen } from '../components/ui/LoadingSpinner';
 
 /**
- * Route wrapper that restricts access to authenticated users only.
+ * Route wrapper restricting access to authenticated users only.
+ * Shows loading spinner while restoring auth session.
  */
 export function ProtectedRoute({ children }) {
+  const { authenticated, loading } = useAuth();
   const location = useLocation();
-  const authenticated = isAuthenticated();
+
+  if (loading) {
+    return <LoadingScreen message="Verifying authentication session..." />;
+  }
 
   if (!authenticated) {
     return <Navigate to="/login" state={{ from: location }} replace />;
