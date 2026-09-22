@@ -9,6 +9,11 @@ import NotFoundPage from '../pages/NotFoundPage';
 import IssuesPage from '../pages/IssuesPage';
 import IssueDetailsPage from '../pages/IssueDetailsPage';
 import CreateEditIssuePage from '../pages/CreateEditIssuePage';
+import ProjectsPage from '../pages/ProjectsPage';
+import ProjectDetailsPage from '../pages/ProjectDetailsPage';
+import CreateEditProjectPage from '../pages/CreateEditProjectPage';
+import ModulesPage from '../pages/ModulesPage';
+import CreateEditModulePage from '../pages/CreateEditModulePage';
 
 export const router = createBrowserRouter([
   {
@@ -53,6 +58,34 @@ export const router = createBrowserRouter([
               {
                 path: 'issues/:id/edit',
                 element: <CreateEditIssuePage />,
+              },
+              {
+                path: 'projects',
+                element: <ProjectsPage />,
+              },
+              {
+                path: 'projects/new',
+                element: <CreateEditProjectPage />,
+              },
+              {
+                path: 'projects/:id',
+                element: <ProjectDetailsPage />,
+              },
+              {
+                path: 'projects/:id/edit',
+                element: <CreateEditProjectPage />,
+              },
+              {
+                path: 'modules',
+                element: <ModulesPage />,
+              },
+              {
+                path: 'modules/new',
+                element: <CreateEditModulePage />,
+              },
+              {
+                path: 'modules/:id/edit',
+                element: <CreateEditModulePage />,
               },
             ],
           },

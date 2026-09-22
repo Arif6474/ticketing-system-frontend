@@ -5,8 +5,8 @@ export function Sidebar() {
   const navItems = [
     { name: 'Dashboard', path: '/' },
     { name: 'Issues', path: '/issues' },
-    { name: 'Projects', path: '/projects', isPlaceholder: true },
-    { name: 'Modules', path: '/modules', isPlaceholder: true },
+    { name: 'Projects', path: '/projects' },
+    { name: 'Modules', path: '/modules' },
     { name: 'Users', path: '/users', isPlaceholder: true },
     { name: 'Verification', path: '/verification', isPlaceholder: true },
   ];
