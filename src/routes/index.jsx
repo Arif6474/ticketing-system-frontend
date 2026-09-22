@@ -14,6 +14,9 @@ import ProjectDetailsPage from '../pages/ProjectDetailsPage';
 import CreateEditProjectPage from '../pages/CreateEditProjectPage';
 import ModulesPage from '../pages/ModulesPage';
 import CreateEditModulePage from '../pages/CreateEditModulePage';
+import UsersPage from '../pages/UsersPage';
+import UserDetailsPage from '../pages/UserDetailsPage';
+import CreateEditUserPage from '../pages/CreateEditUserPage';
 
 export const router = createBrowserRouter([
   {
@@ -86,6 +89,22 @@ export const router = createBrowserRouter([
               {
                 path: 'modules/:id/edit',
                 element: <CreateEditModulePage />,
+              },
+              {
+                path: 'users',
+                element: <UsersPage />,
+              },
+              {
+                path: 'users/new',
+                element: <CreateEditUserPage />,
+              },
+              {
+                path: 'users/:id',
+                element: <UserDetailsPage />,
+              },
+              {
+                path: 'users/:id/edit',
+                element: <CreateEditUserPage />,
               },
             ],
           },

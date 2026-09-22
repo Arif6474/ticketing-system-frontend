@@ -7,7 +7,7 @@ export function Sidebar() {
     { name: 'Issues', path: '/issues' },
     { name: 'Projects', path: '/projects' },
     { name: 'Modules', path: '/modules' },
-    { name: 'Users', path: '/users', isPlaceholder: true },
+    { name: 'Users', path: '/users' },
     { name: 'Verification', path: '/verification', isPlaceholder: true },
   ];
 
