@@ -5,6 +5,8 @@ import ProtectedRoute from './ProtectedRoute';
 import PublicRoute from './PublicRoute';
 import DashboardPage from '../pages/DashboardPage';
 import LoginPage from '../pages/LoginPage';
+import ForgotPasswordPage from '../pages/ForgotPasswordPage';
+import ResetPasswordPage from '../pages/ResetPasswordPage';
 import NotFoundPage from '../pages/NotFoundPage';
 import IssuesPage from '../pages/IssuesPage';
 import IssueKanbanPage from '../pages/IssueKanbanPage';
@@ -31,6 +33,14 @@ export const router = createBrowserRouter([
           {
             path: 'login',
             element: <LoginPage />,
+          },
+          {
+            path: 'forgot-password',
+            element: <ForgotPasswordPage />,
+          },
+          {
+            path: 'reset-password',
+            element: <ResetPasswordPage />,
           },
         ],
       },

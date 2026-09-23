@@ -1,17 +1,14 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
-import useAuth from '../hooks/useAuth';
+import { Link } from 'react-router-dom';
+import { forgotPasswordApi } from '../api/auth';
 import { parseApiError } from '../utils/errorHandler';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 
-export function LoginPage() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { login } = useAuth();
-  
+export function ForgotPasswordPage() {
   const [serverError, setServerError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
   const {
@@ -21,22 +18,22 @@ export function LoginPage() {
   } = useForm({
     defaultValues: {
       email: '',
-      password: '',
     },
   });
-
-  const from = location.state?.from?.pathname || '/';
 
   const onSubmit = async (data) => {
     setSubmitting(true);
     setServerError('');
+    setSuccessMessage('');
 
     try {
-      await login(data.email, data.password);
-      navigate(from, { replace: true });
+      const res = await forgotPasswordApi({ email: data.email });
+      setSuccessMessage(
+        res?.message || 'If your email is registered in our system, password recovery instructions have been processed.'
+      );
     } catch (err) {
       const parsed = parseApiError(err);
-      setServerError(parsed.message || 'Invalid credentials or login failed');
+      setServerError(parsed.message || 'Failed to request password reset.');
     } finally {
       setSubmitting(false);
     }
@@ -49,7 +46,7 @@ export function LoginPage() {
           <div className="h-12 w-12 rounded-2xl bg-indigo-600 flex items-center justify-center font-bold text-xl text-white shadow-xl shadow-indigo-500/20 mx-auto">
             T
           </div>
-          <h1 className="text-2xl font-bold text-slate-100">Sign In</h1>
+          <h1 className="text-2xl font-bold text-slate-100">Forgot Password</h1>
           <p className="text-xs text-slate-400">
             Internal Ticketing System
           </p>
@@ -62,11 +59,17 @@ export function LoginPage() {
             </div>
           )}
 
+          {successMessage && (
+            <div className="p-3.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs leading-relaxed font-mono">
+              {successMessage}
+            </div>
+          )}
+
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <Input
               label="Email Address"
               type="email"
-              placeholder="admin@example.com"
+              placeholder="user@example.com"
               error={errors.email?.message}
               {...register('email', {
                 required: 'Email address is required',
@@ -77,26 +80,19 @@ export function LoginPage() {
               })}
             />
 
-            <Input
-              label="Password"
-              type="password"
-              placeholder="••••••••"
-              error={errors.password?.message}
-              {...register('password', {
-                required: 'Password is required',
-              })}
-            />
-
-            <div className="flex justify-end text-xs">
-              <Link to="/forgot-password" className="text-indigo-400 hover:text-indigo-300 transition-colors">
-                Forgot Password?
-              </Link>
-            </div>
-
             <Button type="submit" variant="primary" className="w-full" isLoading={submitting}>
-              Sign In
+              Send Reset Request
             </Button>
           </form>
+
+          <div className="pt-2 flex items-center justify-between text-xs text-slate-400 border-t border-slate-800">
+            <Link to="/login" className="text-indigo-400 hover:text-indigo-300 transition-colors">
+              &larr; Back to Sign In
+            </Link>
+            <Link to="/reset-password" className="text-slate-400 hover:text-slate-200 transition-colors">
+              Have a reset token?
+            </Link>
+          </div>
         </div>
 
         <div className="text-center text-[11px] text-slate-500 font-mono">
@@ -107,4 +103,4 @@ export function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default ForgotPasswordPage;
