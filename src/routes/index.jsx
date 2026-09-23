@@ -7,6 +7,7 @@ import DashboardPage from '../pages/DashboardPage';
 import LoginPage from '../pages/LoginPage';
 import NotFoundPage from '../pages/NotFoundPage';
 import IssuesPage from '../pages/IssuesPage';
+import IssueKanbanPage from '../pages/IssueKanbanPage';
 import IssueDetailsPage from '../pages/IssueDetailsPage';
 import CreateEditIssuePage from '../pages/CreateEditIssuePage';
 import ProjectsPage from '../pages/ProjectsPage';
@@ -50,6 +51,10 @@ export const router = createBrowserRouter([
               {
                 path: 'issues',
                 element: <IssuesPage />,
+              },
+              {
+                path: 'issues/kanban',
+                element: <IssueKanbanPage />,
               },
               {
                 path: 'issues/new',

@@ -90,11 +90,18 @@ export function IssuesPage() {
             Manage and track software defect reports and feature requests.
           </p>
         </div>
-        <Link to="/issues/new">
-          <Button variant="primary">
-            + Create Issue
-          </Button>
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link to="/issues/kanban">
+            <Button variant="secondary">
+              Kanban View
+            </Button>
+          </Link>
+          <Link to="/issues/new">
+            <Button variant="primary">
+              + Create Issue
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {actionError && (
